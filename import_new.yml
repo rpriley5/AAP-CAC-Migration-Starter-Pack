@@ -1,0 +1,59 @@
+---
+- name: Import Automation Controller Configs
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - vars.yml
+  pre_tasks:
+    - name: Assert defined variables
+      ansible.builtin.assert:
+        that:
+          - aap_hostname is defined
+          - aap_username is defined
+          - aap_password is defined
+        fail_msg: "You must define aap_hostname, aap_username, and aap_password in vars.yml."
+
+    - name: "Setup authentication (block)"
+      no_log: "{{ controller_configuration_filetree_create_secure_logging | default('false') }}"
+      when: aap_oauthtoken is not defined
+      tags:
+        - always
+      block:
+        - name: "Get the Authentication Token for the future requests"
+          ansible.builtin.uri:
+            url: "https://{{ aap_hostname }}/api/gateway/v1/tokens/"
+            user: "{{ aap_username }}"
+            password: "{{ aap_password }}"
+            method: POST
+            force_basic_auth: true
+            validate_certs: "{{ aap_validate_certs }}"
+            status_code: 201
+          register: authtoken_res
+
+        - name: "Set the oauth token to be used since now"
+          ansible.builtin.set_fact:
+            aap_oauthtoken: "{{ authtoken_res.json.token }}"
+            controller_oauthtoken: "{{ authtoken_res.json.token }}"
+            aap_oauthtoken_url: "{{ authtoken_res.json.url }}"
+      
+    - name: Load all variable files from {{ output_path }}
+      ansible.builtin.include_vars:
+        dir: "{{ output_path }}"
+
+    - set_fact:
+        controller_username: "admin" # MUST BE ADMIN USER
+        controller_password: "oXjEGhd85maDLPfYFwV2Kz0IjhzZGXXw"
+        controller_hostname: "phoneix-aap-26.apps.gw7qzvku.eastus.aroapp.io" # DO NOT INCLUDE http:// or https://
+
+  roles:
+    - {role: infra.controller_configuration.credential_types, when: controller_credential_types is defined}
+    # - {role: infra.controller_configuration.settings, when: controller_settings is defined}
+    # - {role: infra.controller_configuration.organizations, when: controller_organizations is defined}
+    - {role: infra.controller_configuration.credentials, when: controller_credentials is defined}
+    - {role: infra.controller_configuration.projects, when: controller_projects is defined}
+    - {role: infra.controller_configuration.execution_environments, when: controller_execution_environments is defined, ignore_errors: true}
+    - {role: infra.controller_configuration.inventories, when: controller_inventories is defined}
+    - {role: infra.controller_configuration.inventory_sources, when: controller_inventory_sources is defined}
+    - {role: infra.controller_configuration.hosts, when: controller_hosts is defined}
+    - {role: infra.controller_configuration.job_templates, when: controller_templates is defined}
+

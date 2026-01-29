@@ -2,8 +2,6 @@
 - name: Output Automation Controller Configs
   hosts: localhost
   gather_facts: false
-  vars_files:
-    - vars.yml
   pre_tasks:
     - name: "Setup authentication (block)"
       no_log: "{{ controller_configuration_filetree_create_secure_logging | default('false') }}"
@@ -34,7 +32,9 @@
         state: absent
 
   roles:
-    - infra.controller_configuration.filetree_create
+    - role: infra.controller_configuration.filetree_create
+      vars:
+        organization_filter: "{{ export_organization | default(omit) }}"
 
   post_tasks:
     - name: "Delete the Authentication Token used"

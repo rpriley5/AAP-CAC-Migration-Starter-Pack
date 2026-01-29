@@ -3,3 +3,4 @@ collections:
   - name: awx.awx
   - name: infra.aap_configuration_extended
   - name: ansible.controller
+  - name: infra.controller_configuration
