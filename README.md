@@ -1,7 +1,7 @@
 # AAP-CaC (AAP 2.4/AWX ➜ AAP 2.5/2.6) — Migration Starter Pack
 
 > **Important support notice!!**  
-> This repository is a **community starting point** for moving Automation Controller objects that are exportable via **Config-as-Code (CaC)** from **AAP 2.4 or AWX** into **AAP 2.5**.  
+> This repository is a **community starting point** for moving Automation Controller objects that are exportable via **Config-as-Code (CaC)** from **AAP 2.4 or AWX** into **AAP 2.5+**.  
 > It is **not** an official or supported migration path from Red Hat. Validate everything in non-production first.
 
 > **Credential secrets cannot be migrated**  
@@ -9,9 +9,9 @@
 
 ## What this repo contains
 
-- **`export_24.yml`** — exports CaC data from **AAP ≤ 2.4 / AWX**. Use this when your source is 2.4 or older.  
-- **`export_25.yml`** — exports CaC data from **AAP 2.5+** (useful for iterative backups or 2.5→2.5 transfers).  
-- **`import_25.yml`** — imports the exported CaC bundle into **AAP 2.5** in dependency-safe order.  
+- **`export_old.yml`** — exports CaC data from **AAP ≤ 2.4 / AWX**. Use this when your source is 2.4 or older.  
+- **`export_new.yml`** — exports CaC data from **AAP 2.5+** (useful for iterative backups or 2.5→2.5 transfers).  
+- **`import_new.yml`** — imports the exported CaC bundle into **AAP 2.5** in dependency-safe order.  
 - **`vars.yml`** — example variables file you customize for your environments.  
 - **`collections/`** — pinned collections for repeatable runs (install with `ansible-galaxy`).  
 
@@ -64,17 +64,17 @@ controller_validate_certs: "false"
 
 ### A) Export from AAP 2.4 / AWX
 ```bash
-ansible-playbook export_24.yml -e @vars.yml
+ansible-playbook export_old.yml -e @vars.yml -e export_organization=<Org Name>
 ```
 
-### B) Export from AAP 2.5
+### B) Export from AAP 2.5+
 ```bash
-ansible-playbook export_25.yml -e @vars.yml
+ansible-playbook export_new.yml -e @vars.yml
 ```
 
-### C) Import into AAP 2.5
+### C) Import into AAP 2.5+
 ```bash
-ansible-playbook import_25.yml -e @vars.yml
+ansible-playbook import_new.yml -e @vars.yml
 ```
 
 > **After the import:** re-enter all credential secrets in AAP 2.5.
