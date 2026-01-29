@@ -37,23 +37,27 @@ ansible-galaxy install -r collections/requirements.yml
 Create or edit `vars.yml` in the repo root. The exact variable names in your playbooks may vary slightly; here’s a **working template**:
 
 ```yaml
-# --- Source (AAP 2.4 or AWX) ---
+# AAP 2.4 or AWX
 controller_username: "admin" # MUST BE ADMIN USER
-controller_password: "xxxxxxxxxxxxxx"
-controller_hostname: "aap.example.com" # DO NOT INCLUDE http:// or https://
+controller_password: "<your password here>"
+controller_hostname: "controller.example.com" # DO NOT INCLUDE http:// or https://
 controller_api_plugin: awx.awx.controller_api
 
-
-# --- Destination (AAP 2.5) ---
+## 2.5/2.6
 aap_username: "admin" # MUST BE ADMIN USER
-aap_password: "xxxxxxxxxxxxxx"
+aap_password: "<your password here>"
 aap_hostname: "aap.example.com" # DO NOT INCLUDE http:// or https://
 
 # General
-output_path: "./exports"
+export_organization: "{{ default(None) }}"
+output_path: "./exports/{{ export_organization }}"
 flatten_output: true
 aap_validate_certs: "false"
 controller_validate_certs: "false"
+
+# DEBUG
+controller_configuration_credentials_secure_logging: "false"
+cas_secure_logging: "false"
 ```
 
 > Keep tokens out of Git. Prefer environment variables + `ansible-vault` or your secret manager.

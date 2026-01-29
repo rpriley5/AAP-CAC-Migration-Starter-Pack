@@ -9,10 +9,6 @@ aap_username: "admin" # MUST BE ADMIN USER
 aap_password: "<your password here>"
 aap_hostname: "aap.example.com" # DO NOT INCLUDE http:// or https://
 
-controller_username: "admin" # MUST BE ADMIN USER
-controller_password: "<your password here>"
-controller_hostname: "aap.example.com" # DO NOT INCLUDE http:// or https://
-
 # General
 export_organization: "{{ default(None) }}"
 output_path: "./exports/{{ export_organization }}"
