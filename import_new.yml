@@ -42,13 +42,20 @@
 
   roles:
     - {role: infra.controller_configuration.credential_types, when: controller_credential_types is defined}
+    - {role: infra.controller_configuration.credential_input_sources, when: controller_credential_input_sources is defined}
     # - {role: infra.controller_configuration.settings, when: controller_settings is defined}
-    # - {role: infra.controller_configuration.organizations, when: controller_organizations is defined}
+    - {role: infra.controller_configuration.organizations, when: controller_organizations is defined}
     - {role: infra.controller_configuration.credentials, when: controller_credentials is defined}
     - {role: infra.controller_configuration.projects, when: controller_projects is defined}
     - {role: infra.controller_configuration.execution_environments, when: controller_execution_environments is defined, ignore_errors: true}
     - {role: infra.controller_configuration.inventories, when: controller_inventories is defined}
     - {role: infra.controller_configuration.inventory_sources, when: controller_inventory_sources is defined}
     - {role: infra.controller_configuration.hosts, when: controller_hosts is defined}
+    - {role: infra.controller_configuration.groups, when: controller_groups is defined}
+    - {role: infra.controller_configuration.instances, when: controller_instances is defined}
+    - {role: infra.controller_configuration.instance_groups, when: controller_instance_groups is defined}
     - {role: infra.controller_configuration.job_templates, when: controller_templates is defined}
+    - {role: infra.controller_configuration.workflow_templates, when: controller_workflows is defined}
+    - {role: infra.controller_configuration.schedules, when: controller_schedules is defined}
+    - {role: infra.controller_configuration.notification_templates, when: controller_notifications is defined}
 
