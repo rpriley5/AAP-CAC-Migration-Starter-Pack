@@ -10,8 +10,8 @@ aap_password: "<your password here>"
 aap_hostname: "aap.example.com" # DO NOT INCLUDE http:// or https://
 
 # General
-export_organization: "{{ default(None) }}"
-output_path: "./exports/{{ export_organization }}"
+export_organization: ""
+output_path: "./exports/{{ export_organization | default('') }}"
 flatten_output: true
 aap_validate_certs: "false"
 controller_validate_certs: "false"
